@@ -26,6 +26,10 @@ export default function App() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
+    document.title = "Sweepy G Sports Models";
+  }, []);
+
+  useEffect(() => {
     setSelectedGame(null);
     setSchedule([]);
     setLoading(true);
@@ -68,8 +72,8 @@ export default function App() {
               return {
                 id: ev.id,
                 date: ev.date,
-                away: away.team.abbreviation,
-                home: home.team.abbreviation,
+                away: away?.team?.abbreviation || away?.team?.shortDisplayName,
+                home: home?.team?.abbreviation || home?.team?.shortDisplayName,
               };
             })
           );
@@ -133,9 +137,9 @@ export default function App() {
             <div>
               <label className="block text-sm mb-2">Select Game</label>
               <select
-                value={selectedGame?.id || ""}
+                value={selectedGame?.id?.toString() || ""}
                 onChange={(e) => {
-                  const g = schedule.find((g) => g.id === e.target.value);
+                  const g = schedule.find((g) => g.id.toString() === e.target.value);
                   setSelectedGame(g);
                 }}
                 className="w-full bg-neutral-800 border border-neutral-600 rounded-lg px-3 py-2"
@@ -151,7 +155,7 @@ export default function App() {
                   <option disabled>No games found</option>
                 )}
                 {schedule.map((g) => (
-                  <option key={g.id} value={g.id}>
+                  <option key={g.id} value={g.id.toString()}>
                     {g.away} @ {g.home} ({g.date.split("T")[0]})
                   </option>
                 ))}
